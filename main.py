@@ -18,12 +18,14 @@ def get_folders():
         else:
             print("directory not found")
 
-def convert_ram_to_text(file):
+def convert_ram_to_text(folder, file):
+    directory = join(folder, file)
     operaten = ["take", "add", "sub", "save", "jmp", "tst", "inc", "dec", "null", "hlt"]
     text = list()
     pointer = 0
-    with open(file, "r") as f:
-        for i, line in enumerate(f):
+    with open(directory, "r") as f:
+        text.append(os.path.basename(folder) + "_" + os.path.splitext(file)[0])
+        for i, line in enumerate(f, 1):
             stripped_line = line.strip()
             op = stripped_line[:len(stripped_line)-3]
 
@@ -50,9 +52,9 @@ def save_ram(folder):
     files = [f for f in listdir(folder) if f.endswith(".ram")]
     for file in files:
 
-        with open(os.path.dirname(folder)+"/"+ os.path.basename(folder) + " " +file, "w") as f:
+        with open(os.path.dirname(folder)+"/"+ os.path.basename(folder) + "_" + os.path.splitext(file)[0] + ".txt", "w") as f:
             print("saved in: " + os.path.dirname(folder)+"/"+ os.path.basename(folder) + " " + file)
-            a = convert_ram_to_text(join(folder, file))
+            a = convert_ram_to_text(folder, file)
             f.writelines("%s\n" % line for line in a)
     
 
